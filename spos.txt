@@ -1,0 +1,2434 @@
+bestfit
+ 
+import java.util.*;
+class b_fit
+{
+    int memsize[]=new int[6],processsize[]=new int [6],m,p;
+         int temp = 0;
+     int finite =0 ;   
+    Scanner sc = new Scanner(System.in);
+        
+   public  void insert()
+   {
+    
+     
+      System.out.println("Enter the no of memory blocks");
+     m = sc.nextInt();
+     for(int i=0;i<m;i++)
+     {
+        memsize[i]= sc.nextInt();
+     }
+     System.out.println("Enter the no of process  blocks");
+     p = sc.nextInt();
+     for(int j=0;j<p;j++)
+     {
+        processsize[j]= sc.nextInt();
+     
+     }
+     }
+
+     public void  sort()
+     {
+      for(int i=0;i<m;i++)
+      {
+        for(int j=i;j<m;j++)
+        {
+          if (memsize[i]>memsize[j])
+          {
+           temp=memsize[i];
+           memsize[i]=memsize[j];
+           memsize[j]=temp;
+           
+          }
+        }
+      }
+
+     }
+     
+     public void  fit()
+     {
+      for(int i=0;i<5;i++)
+      {
+        for(int j=0;j<5;j++)
+        {
+          if (memsize[j]>processsize[i])
+          {
+           System.out.println("The memory  blocks "+memsize[j]+"assign to"+processsize[i]);
+           memsize[j]=-1;
+           break;
+           }
+          
+           }
+        }      
+     
+     }
+     public void display()
+     {
+      System.out.println("The no of memory  blocks are");
+     for(int i=0;i<m;i++)
+      {
+             System.out.println(memsize[i]+" ");
+       }
+       
+     /* System.out.println("The no of process  blocks are");
+     for(int k=0;k<m;k++)
+      {
+             System.out.println(processsize[k]+" ");
+       }
+       */      
+    
+     }
+}
+
+public class bestfit
+{
+  public static void main (String args [])
+  {
+   b_fit b = new b_fit();
+   b.insert();
+   b.sort();
+   b.display();
+   b.fit();
+  }
+}
+     
+fifo
+
+#include<iostream>
+using namespace std;
+bool is_present(int n,int frame[],int f)
+{
+    int flag=0;
+    for(int i=0;i<f;i++)
+    {
+        if(frame[i]==n)
+        {
+            flag=1;
+            break;
+        }
+    }
+    if(flag==1)
+    return true;
+    else 
+    return false;
+}
+int main()
+{
+    int s;
+    cout<<"Enter the number of pages: ";
+    cin>>s;
+    int sequence[s];
+    cout<<"Enter the name of pages: "<<endl;
+    for(int i=0;i<s;i++)
+    {
+        cin>>sequence[i];
+    }
+    int f;
+    cout<<"Enter the number of frames: ";
+    cin>>f;
+    int faults=f,hits=0,p=0;
+    int frame[f];
+    for(int i=0;i<f;i++)
+    {
+        frame[i]=sequence[i];
+
+    }
+    for(int i=f;i<s;i++)
+    {
+        if(!is_present(sequence[i],frame,f))
+        {
+            if(p<f)
+            {
+                frame[p]=sequence[i];
+                p++;
+            }
+            else
+            {
+                p=0;
+                frame[p]=sequence[i];
+                p++;
+            }
+            faults++;
+
+        }
+        else 
+        
+            hits++;
+    }
+    cout<<"faults: "<<faults<<endl;
+    cout<<"Hits: "<<hits<<endl;
+
+
+    return 0;
+}
+
+iru
+
+#include<iostream>
+using namespace std;
+bool is_present(int n,int frame[],int f)
+{
+    int flag=0;
+    for(int i=0;i<f;i++)
+    {
+        if(frame[i]==n)
+        {
+            flag=1;
+            break;
+        }
+    }
+    if(flag==1)
+    return true;
+    else 
+    return false;
+}
+int list_rank(int frame[],int f)
+{
+    int min=frame[0];
+    int idx=0;
+    for(int i=1;i<f;i++)
+    {
+        if(frame[i]<min)
+        {
+            min=frame[i];
+            idx=i;
+        }
+    }
+    return idx;
+}
+int main()
+{
+    int s;
+    cout<<"Enter the number of pages: ";
+    cin>>s;
+    int sequence[s];
+    cout<<"Enter the name of pages: "<<endl;
+    for(int i=0;i<s;i++)
+    {
+        cin>>sequence[i];
+    }
+    int f;
+    cout<<"Enter the number of frames: ";
+    cin>>f;
+    int faults=f,hits=0,p=0;
+    int frame[f], time[f]={0};
+    for(int i=0;i<f;i++)
+    {
+        frame[i]=sequence[i];
+        time[i]=i;
+        cout<<"time["<<frame[i]<<"]"<<time[i]<<endl;
+    }
+    cout<<endl;
+    for(int i=f;i<s;i++)
+    {
+        if(!is_present(sequence[i],frame,f))
+        {
+            cout<<sequence[i]<<endl;
+            int ret=list_rank(frame,f);
+            cout<<"Function value: "<<ret<<endl;
+            cout<<"Old value at: "<<ret<<" is: "<<frame[ret]<<endl;
+            frame[ret]=sequence[i];
+            time[ret]=time[ret]+1;
+            for(int i=0;i<f;i++)
+            {
+                cout<<"time["<<frame[i]<<"]"<<time[i]<<endl;
+            }
+            cout<<endl;
+            faults++;
+
+        }
+        else 
+        {
+            hits++;
+            for(int j=0;j<f;j++)
+            {
+                if(frame[j]==sequence[i])
+                {
+                    time[j]=time[j]+1;
+                    break;
+                }
+            }
+            for(int i=0;i<f;i++)
+            {
+                cout<<"time["<<frame[i]<<"]"<<time[i]<<endl;
+            }
+            cout<<endl;
+            
+        }
+    }
+    cout<<"faults: "<<faults<<endl;
+    cout<<"Hits: "<<hits<<endl;
+
+
+    return 0;
+}
+
+optimal
+
+#include<iostream>
+using namespace std;
+bool is_present(int n,int frame[],int f)
+{
+    int flag=0;
+    for(int i=0;i<f;i++)
+    {
+        if(frame[i]==n)
+        {
+            flag=1;
+            break;
+        }
+    }
+    if(flag==1)
+    return true;
+    else 
+    return false;
+}
+int search(int frame[],int f,int sequence[],int s,int j)
+{
+    int flag=0;
+    int min=INT8_MAX;
+    for(int i=0;i<f;i++)
+    {
+        flag=0;
+        for(int k=f;k<j;k++)
+        {
+            if(frame[i]==sequence[k])
+            {
+                flag=1;
+                if(i<min)
+                {
+                    min=i;
+                }
+            }
+        }
+        if(flag==0)
+        {
+            return i;
+        }
+    }
+    return min;
+}
+int main()
+{
+    int s;
+    cout<<"Enter the number of pages: ";
+    cin>>s;
+    
+    int sequence[s];
+    cout<<"Enter the name of pages: "<<endl;
+    for(int i=0;i<s;i++)
+    {
+        cin>>sequence[i];
+    }
+    int f;
+    cout<<"Enter the number of frames: ";
+    cin>>f;
+    int faults=f,hits=0,p=0,max=0;
+    int frame[f];
+    for(int i=0;i<f;i++)
+    {
+        frame[i]=sequence[i];
+
+    }
+    for(int i=f;i<s;i++)
+    {
+        if(!is_present(sequence[i],frame,f))
+        {
+            frame[search(frame,f,sequence,s,i)]=sequence[i];
+            faults++;
+        }
+        else 
+        
+            hits++;
+    }
+    cout<<"faults: "<<faults<<endl;
+    cout<<"Hits: "<<hits<<endl;
+
+
+    return 0;
+}
+
+next
+
+// Java program for next fit
+// memory management algorithm
+import java.util.Arrays;
+
+public class GFG {
+
+// Function to allocate memory to blocks as per Next fit
+// algorithm
+	static void NextFit(int blockSize[], int m, int processSize[], int n) {
+		// Stores block id of the block allocated to a
+		// process
+		int allocation[] = new int[n], j = 0;
+
+		// Initially no block is assigned to any process
+		Arrays.fill(allocation, -1);
+
+		// pick each process and find suitable blocks
+		// according to its size ad assign to it
+		for (int i = 0; i < n; i++) {
+
+			// Do not start from beginning
+			int count =0;
+			while (j < m) {
+				count++; //makes sure that for every process we traverse through entire array maximum once only.This avoids the problem of going into infinite loop if memory is not available
+				if (blockSize[j] >= processSize[i]) {
+
+					// allocate block j to p[i] process
+					allocation[i] = j;
+
+					// Reduce available memory in this block.
+					blockSize[j] -= processSize[i];
+
+					break;
+				}
+
+				// mod m will help in traversing the blocks from
+				// starting block after we reach the end.
+				j = (j + 1) % m;
+			}
+		}
+
+		System.out.print("\nProcess No.\tProcess Size\tBlock no.\n");
+		for (int i = 0; i < n; i++) {
+			System.out.print( i + 1 + "\t\t" + processSize[i]
+					+ "\t\t");
+			if (allocation[i] != -1) {
+				System.out.print(allocation[i] + 1);
+			} else {
+				System.out.print("Not Allocated");
+			}
+			System.out.println("");
+		}
+	}
+
+// Driver program
+	static public void main(String[] args) {
+		int blockSize[] = {5, 10, 20};
+		int processSize[] = {10, 20, 5};
+		int m = blockSize.length;
+		int n = processSize.length;
+		NextFit(blockSize, m, processSize, n);
+	}
+}
+
+MNTEntry
+
+public class MNTEntry {
+String name;
+int pp,kp,mdtp,kpdtp;
+
+
+public MNTEntry(String name, int pp, int kp, int mdtp, int kpdtp) {
+	super();
+	this.name = name;
+	this.pp = pp;
+	this.kp = kp;
+	this.mdtp = mdtp;
+	this.kpdtp = kpdtp;
+}
+public String getName() {
+	return name;
+}
+public void setName(String name) {
+	this.name = name;
+}
+public int getPp() {
+	return pp;
+}
+public void setPp(int pp) {
+	this.pp = pp;
+}
+public int getKp() {
+	return kp;
+}
+public void setKp(int kp) {
+	this.kp = kp;
+}
+public int getMdtp() {
+	return mdtp;
+}
+public void setMdtp(int mdtp) {
+	this.mdtp = mdtp;
+}
+public int getKpdtp() {
+	return kpdtp;
+}
+public void setKpdtp(int kpdtp) {
+	this.kpdtp = kpdtp;
+}
+
+}
+
+worstfit
+
+import java.util.*;
+class w_fit
+{
+    int memsize[]=new int[6],processsize[]=new int [6],m,p;
+         int temp = 0;
+      
+    Scanner sc = new Scanner(System.in);
+        
+   public  void insert()
+   {
+    
+     
+      System.out.println("Enter the no of memory blocks");
+     m = sc.nextInt();
+     for(int i=0;i<m;i++)
+     {
+        memsize[i]= sc.nextInt();
+     }
+     System.out.println("Enter the no of process  blocks");
+     p = sc.nextInt();
+     for(int j=0;j<p;j++)
+     {
+        processsize[j]= sc.nextInt();
+     
+     }
+     }
+
+     public void  sort()
+     {
+      for(int i=0;i<m;i++)
+      {
+        for(int j=i;j<m;j++)
+        {
+          if (memsize[i]<memsize[j])
+          {
+           temp=memsize[i];
+           memsize[i]=memsize[j];
+           memsize[j]=temp;
+           
+          }
+        }
+      }
+
+     }
+     
+     public void  fit()
+     {
+      for(int i=0;i<5;i++)
+      {
+        for(int j=0;j<5;j++)
+        {
+          if (memsize[j]>processsize[i])
+          {
+           System.out.println("The memory  blocks "+memsize[j]+"assign to"+processsize[i]);
+           memsize[j]=-1;
+           break;
+           }
+          
+           }
+        }      
+     
+     }
+     public void display()
+     {
+      System.out.println("The no of memory  blocks are");
+     for(int i=0;i<m;i++)
+      {
+             System.out.println(memsize[i]+" ");
+       }
+       
+     /* System.out.println("The no of process  blocks are");
+     for(int k=0;k<m;k++)
+      {
+             System.out.println(processsize[k]+" ");
+       }
+       */      
+    
+     }
+}
+
+public class worstfit
+{
+  public static void main (String args [])
+  {
+   w_fit b = new w_fit();
+   b.insert();
+   b.sort();
+   b.display();
+   b.fit();
+  }
+}
+     
+Schedule
+
+import java.util.*;
+
+class Schedule
+{
+static Scanner sc=new Scanner(System.in);
+	public static void main(String[] args)
+	{
+		
+		int choice=0;
+		do{
+			System.out.println("\n*--*--*--*--*--*--*--*--*--*--*--*--*--*--*");
+			System.out.println("Choose the Scheduling Algorithm: --->");
+			System.out.println("1. Priority Based Scheduling");
+			System.out.println("2. Round Robin");
+			System.out.println("3. Shortest-Job-First Preemtive ");
+			System.out.println("4. FCFS");		
+			System.out.println("5. Exit");
+			System.out.print("Enter Your Choice : ");
+			 choice= sc.nextInt();			
+			System.out.println("*--*--*--*--*--*--*--*--*--*--*--*--*--*--*");
+			switch(choice)
+			{
+				case 1: priority();
+					break;
+
+				case 2: rr();
+					break;
+
+				case 3: sjfp();
+					break;
+
+				case 4: fcfs();
+					break;
+
+			}
+		}while(choice!=5);
+	}
+
+
+	static void priority()
+	{
+		
+            Scanner s = new Scanner(System.in);
+            int x,n,p[],pp[],bt[],w[],t[],awt,atat,i;
+
+                                                        //n is number of process
+                                                        //p is process
+                                                        //pp is process priority
+                                                        //bt is process burst time
+                                                        //w is wait time
+                                                        // t is turnaround time
+                                                        //awt is average waiting time
+                                                        //atat is average turnaround time
+
+            p = new int[10];
+            pp = new int[10];
+            bt = new int[10];
+            w = new int[10];
+            t = new int[10];
+
+   System.out.print("Enter the number of process : ");
+   n = s.nextInt();
+
+   for(i=0;i<n;i++)
+    {
+       System.out.print("\nProcess["+(i+1)+"]:");
+       System.out.print("\t Enter burst time : ");
+       bt[i] = s.nextInt();
+       System.out.print("\t time priorities :");
+       pp[i] = s.nextInt();
+       p[i]=i+1;
+    }
+ 
+//sorting on the basis of priority
+  for(i=0;i<n-1;i++)
+   {
+     for(int j=i+1;j<n;j++)
+     {
+       if(pp[i]>pp[j])
+       {
+     x=pp[i];
+     pp[i]=pp[j];
+     pp[j]=x;
+     x=bt[i];
+     bt[i]=bt[j];
+     bt[j]=x;
+     x=p[i];
+     p[i]=p[j];
+     p[j]=x;
+      }
+   }
+}
+    w[0]=0;
+    awt=0;
+    t[0]=bt[0];
+    atat=t[0];
+    for(i=1;i<n;i++)
+    {
+        w[i]=t[i-1];
+        awt+=w[i];
+        t[i]=w[i]+bt[i];
+        atat+=t[i];
+    }
+ 
+//Displaying the process
+ 
+  System.out.print("\n\nProcess \t Burst Time \t Wait Time \t Turn Around Time   Priority \n");
+for(i=0;i<n;i++)
+  System.out.print("\n   "+p[i]+"\t\t   "+bt[i]+"\t\t     "+w[i]+"\t\t     "+t[i]+"\t\t     "+pp[i]+"\n");
+awt/=n;
+atat/=n;
+  System.out.print("\n Average Wait Time : "+awt);
+  System.out.print("\n Average Turn Around Time : "+atat);
+	}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	static void rr()
+	{
+         Scanner s = new Scanner(System.in);
+ 
+          int wtime[],btime[],rtime[],num,quantum,total;
+ 
+          wtime = new int[10];
+          btime = new int[10];
+          rtime = new int[10];
+ 
+System.out.print("Enter number of processes(MAX 10): ");
+num = s.nextInt();
+System.out.print("Enter burst time");
+for(int i=0;i<num;i++) { System.out.print("\nP["+(i+1)+"]: "); btime[i] = s.nextInt(); rtime[i] = btime[i]; wtime[i]=0; } System.out.print("\n\nEnter quantum: "); quantum = s.nextInt(); int rp = num; int i=0; int time=0; System.out.print("0"); wtime[0]=0; while(rp!=0) { if(rtime[i]>quantum)
+ {
+   rtime[i]=rtime[i]-quantum;
+   System.out.print(" | P["+(i+1)+"] | ");
+   time+=quantum;
+   System.out.print(time);
+   }
+ else if(rtime[i]<=quantum && rtime[i]>0)
+ {time+=rtime[i];
+  rtime[i]=rtime[i]-rtime[i];
+  System.out.print(" | P["+(i+1)+"] | ");
+  rp--;
+System.out.print(time);
+ }
+
+
+ 
+i++;
+if(i==num)
+{
+i=0;
+}
+ 
+}
+	}
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+
+
+	static void sjfp()
+	{
+Scanner sc=new Scanner(System.in);
+System.out.println ("enter no of process:");
+int n= sc.nextInt();
+int pid[] = new int[n]; // it takes pid of process
+int at[] = new int[n]; // at means arrival time
+int bt[] = new int[n]; // bt means burst time
+int ct[] = new int[n]; // ct means complete time
+int ta[] = new int[n];// ta means turn around time
+int wt[] = new int[n];  // wt means waiting time
+int f[] = new int[n];  // f means it is flag it checks process is completed or not
+int k[]= new int[n];   // it is also stores brust time
+    int i, st=0, tot=0;
+    float avgwt=0, avgta=0;
+ 
+    for (i=0;i<n;i++)
+    {
+     pid[i]= i+1;
+     System.out.println ("enter process " +(i+1)+ " arrival time:");
+     at[i]= sc.nextInt();
+     System.out.println("enter process " +(i+1)+ " burst time:");
+     bt[i]= sc.nextInt();
+     k[i]= bt[i];
+     f[i]= 0;
+    }
+    
+    while(true){
+     int min=99,c=n;
+     if (tot==n)
+     break;
+    
+     for ( i=0;i<n;i++)
+     {
+     if ((at[i]<=st) && (f[i]==0) && (bt[i]<min))
+     {	
+     min=bt[i];
+     c=i;
+     }
+     }
+    
+     if (c==n)
+     st++;
+     else
+     {
+     bt[c]--;
+     st++;
+     if (bt[c]==0)
+     {
+     ct[c]= st;
+     f[c]=1;
+     tot++;
+     }
+     }
+    }
+    
+    for(i=0;i<n;i++)
+    {
+     ta[i] = ct[i] - at[i];
+     wt[i] = ta[i] - k[i];
+     avgwt+= wt[i];
+     avgta+= ta[i];
+    }
+    
+    System.out.println("pid  arrival  burst  complete turn waiting");
+    for(i=0;i<n;i++)
+    {
+     System.out.println(pid[i] +"\t"+ at[i]+"\t"+ k[i] +"\t"+ ct[i] +"\t"+ ta[i] +"\t"+ wt[i]);
+    }
+    
+    System.out.println("\naverage tat is "+ (float)(avgta/n));
+    System.out.println("average wt is "+ (float)(avgwt/n));
+  
+
+
+	}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	static void fcfs()
+	{
+
+		System.out.println("Enter the no. of processes :");
+		int n= sc.nextInt();
+		int[] burst=new int[n];
+		int[] order=new int[n];
+		int[] wait=new int[n];
+
+		for(int i=1;i<=n;i++)
+		{
+			System.out.print("Enter Burst Time of Process P"+i+" :");
+			burst[i-1]=sc.nextInt();
+
+		}
+
+		System.out.println("Enter Order of Arrival :");
+		for(int i=0;i<n;i++)
+		{
+			order[i]=sc.nextInt();
+
+		}
+		
+		int temp=0;
+		int total=0;
+		System.out.println("Execution Order:");
+		System.out.println("Process \t Burst Time \t Waiting Time");
+		for(int i=0;i<n;i++)
+		{
+			wait[i]=temp;
+			System.out.println("P"+order[i]+"\t\t"+burst[order[i]-1]+"\t\t"+temp);
+			temp += burst[order[i]-1];
+			total += wait[i];
+		}
+        
+		System.out.print("Average waiting Time : "+(total/n));
+
+	}
+
+}
+
+RWP
+
+import java.util.concurrent.Semaphore;
+
+class RWP {
+
+    static Semaphore readLock = new Semaphore(1);
+    static Semaphore writeLock = new Semaphore(1);
+    static int readCount = 0;
+
+    static class Read implements Runnable {
+        @Override
+        public void run() {
+            try {
+                //Acquire Section
+                readLock.acquire();
+                readCount++;
+                if (readCount == 1) {
+                    writeLock.acquire();
+                }
+                readLock.release();
+
+                //Reading section
+                System.out.println("Thread "+Thread.currentThread().getName() + " is READING");
+                Thread.sleep(1500);
+                System.out.println("Thread "+Thread.currentThread().getName() + " has FINISHED READING");
+
+                //Releasing section
+                readLock.acquire();
+                readCount--;
+                if(readCount == 0) {
+                    writeLock.release();
+                }
+                readLock.release();
+            } catch (InterruptedException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    static class Write implements Runnable {
+        @Override
+        public void run() {
+            try {
+                writeLock.acquire();
+                System.out.println("Thread "+Thread.currentThread().getName() + " is WRITING");
+                Thread.sleep(2500);
+                System.out.println("Thread "+Thread.currentThread().getName() + " has finished WRITING");
+                writeLock.release();
+            } catch (InterruptedException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        Read read = new Read();
+        Write write = new Write();
+        Thread t1 = new Thread(read);
+        t1.setName("thread1");
+        Thread t2 = new Thread(read);
+        t2.setName("thread2");
+        Thread t3 = new Thread(write);
+        t3.setName("thread3");
+        Thread t4 = new Thread(read);
+        t4.setName("thread4");
+        t1.start();
+        t3.start();
+        t2.start();
+        t4.start();
+    }
+}
+
+pass 1
+
+import java.io.BufferedReader;
+import java.io.*;
+import java.io.IOException;
+import java.util.*;
+
+public class pass1 {
+	public static void main(String[] args) {
+
+		BufferedReader br = null;
+		FileReader fr = null;
+
+		FileWriter fw = null;
+		BufferedWriter bw = null;
+
+		try {
+			String inputfilename = "Input.txt";
+			fr = new FileReader(inputfilename);
+			br = new BufferedReader(fr);
+
+			String OUTPUTFILENAME = "IC.txt";
+			fw = new FileWriter(OUTPUTFILENAME);
+			bw = new BufferedWriter(fw);
+
+			Hashtable<String, String> is = new Hashtable<String, String>();
+			is.put("STOP", "00");
+			is.put("ADD", "01");
+			is.put("SUB", "02");
+			is.put("MULT", "03");
+			is.put("MOVER", "04");
+			is.put("MOVEM", "05");
+			is.put("COMP", "06");
+			is.put("BC", "07");
+			is.put("DIV", "08");
+			is.put("READ", "09");
+			is.put("PRINT", "10");
+
+			Hashtable<String, String> dl = new Hashtable<String, String>();
+			dl.put("DC", "01");
+			dl.put("DS", "02");
+
+			Hashtable<String, String> ad = new Hashtable<String, String>();
+
+			ad.put("START", "01");
+			ad.put("END", "02");
+			ad.put("ORIGIN", "03");
+			ad.put("EQU", "04");
+			ad.put("LTORG", "05");
+
+			Hashtable<String, String> symtab = new Hashtable<String, String>();
+			Hashtable<String, String> littab = new Hashtable<String, String>();
+
+			String sCurrentLine;
+			int locptr = 0;
+			int litptr = 1;
+			int symptr = 1;
+			
+			sCurrentLine = br.readLine();
+
+			String s1 = sCurrentLine.split(" ")[1];
+			if (s1.equals("START")) {
+				bw.write("AD \t 01 \t");
+				String s2 = sCurrentLine.split(" ")[2];
+				bw.write("C \t" + s2 + "\n");
+				locptr = Integer.parseInt(s2);
+			}
+
+			while ((sCurrentLine = br.readLine()) != null) {
+				int mind_the_LC = 0;
+				String type = null;
+
+				int flag2 = 0;		//checks whether addr is assigned to current symbol
+				
+				String s = sCurrentLine.split(" |\\,")[0];	//consider the first word in the line
+				
+				for (Map.Entry m : symtab.entrySet()) {				//allocating addr to arrived symbols
+					if (s.equals(m.getKey())) {
+						m.setValue(locptr);
+						flag2 = 1;
+					}
+				}
+				if (s.length() != 0 && flag2 == 0) {		//if current string is not " " or addr is not assigned,
+															//then the current string must be a new symbol.			
+					symtab.put(s, String.valueOf(locptr));
+					symptr++;
+				}
+
+				int isOpcode = 0;		//checks whether current word is an opcode or not
+				
+				s = sCurrentLine.split(" |\\,")[1];			//consider the second word in the line
+				
+				for (Map.Entry m : is.entrySet()) {
+					if (s.equals(m.getKey())) {
+						bw.write("IS\t" + m.getValue() + "\t");		//if match found in imperative stmt
+						type = "is";
+						isOpcode = 1;
+					}
+				}
+				
+				
+				for (Map.Entry m : ad.entrySet()) {
+					if (s.equals(m.getKey())) {
+						bw.write("AD\t" + m.getValue() + "\t");		//if match found in Assembler Directive
+						type = "ad";
+						isOpcode = 1;
+					}
+				}
+				for (Map.Entry m : dl.entrySet()) {
+					if (s.equals(m.getKey())) {
+						bw.write("DL\t" + m.getValue() + "\t");		//if match found in declarative stmt
+						type = "dl";
+						isOpcode = 1;
+					}
+				}
+				
+				
+				if (s.equals("END")) {
+					for (Map.Entry m : littab.entrySet()) {
+						if (m.getValue() == "") {
+							m.setValue(locptr);
+							locptr++;
+							mind_the_LC = 1;
+						}
+					}
+				}
+				
+				
+				if(s.equals("EQU")){
+					symtab.put("equ", String.valueOf(locptr));
+				}
+				
+				
+				if (sCurrentLine.split(" |\\,").length > 2) {		//if there are 3 words
+					s = sCurrentLine.split(" |\\,")[2];				//consider the 3rd word
+																	
+																	//this is our first operand.
+																	//it must be either a Register/Declaration/Symbol
+					if (s.equals("AREG")) {
+						bw.write("1\t");
+						isOpcode = 1;
+					} else if (s.equals("BREG")) {
+						bw.write("2\t");
+						isOpcode = 1;
+					} else if (s.equals("CREG")) {
+						bw.write("3\t");
+						isOpcode = 1;
+					} else if (s.equals("DREG")) {
+						bw.write("4\t");
+						isOpcode = 1;
+					} else if (type == "dl") {
+						bw.write("C\t" + s + "\t");
+					} else {
+						symtab.put(s, "");				//forward referenced symbol
+					}
+				}
+				
+				
+				if (sCurrentLine.split(" |\\,").length > 3) {		//if there are 4 words
+					
+					s = sCurrentLine.split(" |\\,")[3];			//consider 4th word.
+																//this is our 2nd operand
+																//it is either a literal, or a symbol
+					if (s.contains("=")) {
+						littab.put(s, "");
+						bw.write("L\t" + litptr + "\t");
+						isOpcode = 1;
+						litptr++;
+					} else {
+						symtab.put(s, "");			//Doubt : what if the current symbol is already present in SYMTAB?
+													//Overwrite?
+						bw.write("S\t" + symptr + "\t");		
+						symptr++;
+						
+					}
+				}
+
+				bw.write("\n");		//done with a line.
+
+				if (mind_the_LC == 0)
+					locptr++;
+			}
+
+			String f1 = "SYMTAB.txt";
+			FileWriter fw1 = new FileWriter(f1);
+			BufferedWriter bw1 = new BufferedWriter(fw1);
+			for (Map.Entry m : symtab.entrySet()) {
+				bw1.write(m.getKey() + "\t" + m.getValue()+"\n");				
+				System.out.println(m.getKey() + " " + m.getValue());
+			}
+
+			String f2 = "LITTAB.txt";
+			FileWriter fw2 = new FileWriter(f2);
+			BufferedWriter bw2 = new BufferedWriter(fw2);
+			for (Map.Entry m : littab.entrySet()) {
+				bw2.write(m.getKey() + "\t" + m.getValue()+"\n");
+				System.out.println(m.getKey() + " " + m.getValue());
+			}
+			
+
+			bw.close();
+			bw1.close();
+			bw2.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+}
+
+PASS 2 
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Map;
+
+public class Pass2 {
+
+	public static void main(String[] args) {
+
+		try {
+			
+			String f = "IC.txt";
+			FileReader fw = new FileReader(f);
+			BufferedReader IC_file = new BufferedReader(fw);
+
+			String f1 = "SYMTAB.txt";
+			FileReader fw1 = new FileReader(f1);
+			BufferedReader symtab_file = new BufferedReader(fw1);
+			symtab_file.mark(500);
+
+			String f2 = "LITTAB.txt";
+			FileReader fw2 = new FileReader(f2);
+			BufferedReader littab_file = new BufferedReader(fw2);
+			littab_file.mark(500);
+
+			String littab[][]=new String[10][2] ;
+			
+			Hashtable<String, String> symtab = new Hashtable<String, String>();
+			String str;
+			int z=0;
+			while ((str = littab_file.readLine()) != null) {
+
+				littab[z][0]=str.split("\t")[0];
+				littab[z][1]=str.split("\t")[1];
+				z++;
+			}
+			while ((str = symtab_file.readLine()) != null) {
+				symtab.put(str.split("\t")[0], str.split("\t")[1]);
+			}
+
+			String f4 = "MACHINE_CODE.txt";
+			FileWriter fw4 = new FileWriter(f4);
+			BufferedWriter machine_code_file = new BufferedWriter(fw4);
+
+			String sCurrentLine;
+			sCurrentLine = IC_file.readLine();
+			int locptr=0;
+			locptr=Integer.parseInt(sCurrentLine.split("\t")[3]);
+			
+			while ((sCurrentLine = IC_file.readLine()) != null) {
+				
+				machine_code_file.write(locptr+"\t");		//always write the LC
+				
+				
+				String s0 = sCurrentLine.split("\t")[0];
+
+				String s1 = sCurrentLine.split("\t")[1];
+				String s2=" ";			
+				if (sCurrentLine.split("\t").length>2)
+				s2=sCurrentLine.split("\t")[3];
+				
+				if (s0.equals("IS")) {
+					machine_code_file.write(s1 + "\t");
+					if (sCurrentLine.split("\t").length == 5) {
+						
+						machine_code_file.write(sCurrentLine.split("\t")[2] + "\t");
+						
+						
+						if (sCurrentLine.split("\t")[3].equals("L")) {
+							int add = Integer.parseInt(sCurrentLine.split("\t")[4]);
+							
+									machine_code_file.write(littab[add-1][1]);
+						
+						}
+						
+						
+						if (sCurrentLine.split("\t")[3].equals("S")) {
+							int add1 = Integer.parseInt(sCurrentLine.split("\t")[4]);
+							int i = 1;
+							String l1;
+							for (Map.Entry m : symtab.entrySet()) {
+								if (i == add1) {
+									machine_code_file.write((String) m.getValue());
+								}
+								i++;
+							}
+							
+						}
+					} else {
+						machine_code_file.write("0\t000");
+					}
+				}
+
+				if(s0.equals("DL")&&s1.equals("02")){		//if it is DS stmt
+							
+					machine_code_file.write("00\t0\t00"+s2);
+					
+				}				
+				if(s0.equals("AD")&&s1.equals("02"))//if it is "END" stmt
+				 {
+					String s;
+					littab_file.reset();
+					while((s = littab_file.readLine()) != null) {
+						machine_code_file.write("00\t0\t00" + s.split("'")[1]+"\n\t");
+					}
+				}
+				
+				
+				
+				
+				locptr++;
+				machine_code_file.write("\n");
+			}
+			IC_file.close();
+			symtab_file.close();
+			littab_file.close();
+			
+			machine_code_file.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+}
+
+MacroP1
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+
+public class MacroP1 {
+
+	public static void main(String[] args) throws IOException{
+		BufferedReader br=new BufferedReader(new FileReader("macro_input.asm"));
+		
+		FileWriter mnt=new FileWriter("mnt.txt");
+		FileWriter mdt=new FileWriter("mdt.txt");
+		FileWriter kpdt=new FileWriter("kpdt.txt");
+		FileWriter pnt=new FileWriter("pntab.txt");
+		FileWriter ir=new FileWriter("intermediate.txt");
+		LinkedHashMap<String, Integer> pntab=new LinkedHashMap<>();
+		String line;
+		String Macroname = null;
+		int mdtp=1,kpdtp=0,paramNo=1,pp=0,kp=0,flag=0;
+		while((line=br.readLine())!=null)
+		{
+			
+			String parts[]=line.split("\\s+");
+			if(parts[0].equalsIgnoreCase("MACRO"))
+			{
+				flag=1;
+				line=br.readLine();
+				parts=line.split("\\s+");
+				Macroname=parts[0];
+				if(parts.length<=1)
+				{
+					mnt.write(parts[0]+"\t"+pp+"\t"+kp+"\t"+mdtp+"\t"+(kp==0?kpdtp:(kpdtp+1))+"\n");
+					continue;
+				}
+				for(int i=1;i<parts.length;i++) //processing of parameters
+				{
+					parts[i]=parts[i].replaceAll("[&,]", "");
+					//System.out.println(parts[i]);
+					if(parts[i].contains("="))
+					{
+						++kp;
+						String keywordParam[]=parts[i].split("=");
+						pntab.put(keywordParam[0], paramNo++);
+						if(keywordParam.length==2)
+						{
+							kpdt.write(keywordParam[0]+"\t"+keywordParam[1]+"\n");
+						}
+						else
+						{
+							kpdt.write(keywordParam[0]+"\t-\n");
+						}
+					}
+					else
+					{
+						pntab.put(parts[i], paramNo++);
+						pp++;
+					}
+				}
+				mnt.write(parts[0]+"\t"+pp+"\t"+kp+"\t"+mdtp+"\t"+(kp==0?kpdtp:(kpdtp+1))+"\n");
+				kpdtp=kpdtp+kp;
+				//System.out.println("KP="+kp);
+				
+				
+			}
+			else if(parts[0].equalsIgnoreCase("MEND"))
+			{
+				mdt.write(line+"\n");
+				flag=kp=pp=0;
+				mdtp++;
+				paramNo=1;
+				pnt.write(Macroname+":\t");
+				Iterator<String> itr=pntab.keySet().iterator();
+				while(itr.hasNext())
+				{
+					pnt.write(itr.next()+"\t");
+				}
+				pnt.write("\n");
+				pntab.clear();
+			}
+			else if(flag==1)
+			{
+				for(int i=0;i<parts.length;i++)
+				{
+					if(parts[i].contains("&"))
+					{
+						parts[i]=parts[i].replaceAll("[&,]", "");
+						mdt.write("(P,"+pntab.get(parts[i])+")\t");
+					}
+					else
+					{
+						mdt.write(parts[i]+"\t");
+					}
+				}
+				mdt.write("\n");
+				mdtp++;
+			}
+			else
+			{
+				ir.write(line+"\n");
+			}
+		}
+		br.close();
+		mdt.close();
+		mnt.close();
+		ir.close();
+		pnt.close();
+		kpdt.close();
+		System.out.println("MAcro PAss1 Processing done. :)");
+	}
+
+}
+
+macroP2
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.util.HashMap;
+import java.util.Vector;
+
+public class MacroP2 {
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader irb=new BufferedReader(new FileReader("intermediate.txt"));
+		BufferedReader mdtb=new BufferedReader(new FileReader("mdt.txt"));
+		BufferedReader kpdtb=new BufferedReader(new FileReader("kpdt.txt"));
+		BufferedReader mntb=new BufferedReader(new FileReader("mnt.txt"));
+		
+		FileWriter fr=new FileWriter("pass2.txt");
+		
+		HashMap<String, MNTEntry> mnt=new HashMap<>();
+		HashMap<Integer, String> aptab=new HashMap<>();
+		HashMap<String,Integer> aptabInverse=new HashMap<>();
+		
+		Vector<String>mdt=new Vector<String>();
+		Vector<String>kpdt=new Vector<String>();
+		
+		int pp,kp,mdtp,kpdtp,paramNo;
+		String line;
+		while((line=mdtb.readLine())!=null)
+		{
+			mdt.addElement(line);
+		}
+		while((line=kpdtb.readLine())!=null)
+		{
+			kpdt.addElement(line);
+		}
+		while((line=mntb.readLine())!=null)
+		{
+			String parts[]=line.split("\\s+");
+			mnt.put(parts[0], new MNTEntry(parts[0], Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Integer.parseInt(parts[3]), Integer.parseInt(parts[4])));
+			
+		}
+		
+		while((line=irb.readLine())!=null)
+		{
+			String []parts=line.split("\\s+");
+			if(mnt.containsKey(parts[0]))
+			{
+				pp=mnt.get(parts[0]).getPp();
+				kp=mnt.get(parts[0]).getKp();
+				kpdtp=mnt.get(parts[0]).getKpdtp();
+				mdtp=mnt.get(parts[0]).getMdtp();
+				paramNo=1;
+				for(int i=0;i<pp;i++)
+				{ 
+					parts[paramNo]=parts[paramNo].replace(",", "");
+					aptab.put(paramNo, parts[paramNo]);
+					aptabInverse.put(parts[paramNo], paramNo);
+					paramNo++;
+				}
+				int j=kpdtp-1;
+				for(int i=0;i<kp;i++)
+				{
+					String temp[]=kpdt.get(j).split("\t");
+					aptab.put(paramNo,temp[1]);
+					aptabInverse.put(temp[0],paramNo);
+					j++;
+					paramNo++;
+				}
+				
+				for(int i=pp+1;i<parts.length;i++)
+				{
+					parts[i]=parts[i].replace(",", "");
+					String splits[]=parts[i].split("=");
+					String name=splits[0].replaceAll("&", "");
+					aptab.put(aptabInverse.get(name),splits[1]);
+				}
+				int i=mdtp-1;
+				while(!mdt.get(i).equalsIgnoreCase("MEND"))
+				{
+					String splits[]=mdt.get(i).split("\\s+");
+					fr.write("+");
+					for(int k=0;k<splits.length;k++)
+					{
+						if(splits[k].contains("(P,"))
+						{
+							splits[k]=splits[k].replaceAll("[^0-9]", "");//not containing number
+							String value=aptab.get(Integer.parseInt(splits[k]));
+							fr.write(value+"\t");
+						}
+						else
+						{
+							fr.write(splits[k]+"\t");
+						}
+					}
+					fr.write("\n");	
+					i++;
+				}
+				
+				aptab.clear();
+				aptabInverse.clear();
+			}
+			else
+			{
+				fr.write(line+"\n");
+			}
+			
+	}
+	
+	fr.close();
+	mntb.close();
+	mdtb.close();
+	kpdtb.close();
+	irb.close();
+	}
+}
+
+RWP
+
+import java.util.concurrent.Semaphore;
+
+class RWP {
+
+    static Semaphore readLock = new Semaphore(1);
+    static Semaphore writeLock = new Semaphore(1);
+    static int readCount = 0;
+
+    static class Read implements Runnable {
+        @Override
+        public void run() {
+            try {
+                //Acquire Section
+                readLock.acquire();
+                readCount++;
+                if (readCount == 1) {
+                    writeLock.acquire();
+                }
+                readLock.release();
+
+                //Reading section
+                System.out.println("Thread "+Thread.currentThread().getName() + " is READING");
+                Thread.sleep(1500);
+                System.out.println("Thread "+Thread.currentThread().getName() + " has FINISHED READING");
+
+                //Releasing section
+                readLock.acquire();
+                readCount--;
+                if(readCount == 0) {
+                    writeLock.release();
+                }
+                readLock.release();
+            } catch (InterruptedException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    static class Write implements Runnable {
+        @Override
+        public void run() {
+            try {
+                writeLock.acquire();
+                System.out.println("Thread "+Thread.currentThread().getName() + " is WRITING");
+                Thread.sleep(2500);
+                System.out.println("Thread "+Thread.currentThread().getName() + " has finished WRITING");
+                writeLock.release();
+            } catch (InterruptedException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        Read read = new Read();
+        Write write = new Write();
+        Thread t1 = new Thread(read);
+        t1.setName("thread1");
+        Thread t2 = new Thread(read);
+        t2.setName("thread2");
+        Thread t3 = new Thread(write);
+        t3.setName("thread3");
+        Thread t4 = new Thread(read);
+        t4.setName("thread4");
+        t1.start();
+        t3.start();
+        t2.start();
+        t4.start();
+    }
+}
+
+Schedule
+
+
+import java.util.*;
+
+class Schedule
+{
+static Scanner sc=new Scanner(System.in);
+	public static void main(String[] args)
+	{
+		
+		int choice=0;
+		do{
+			System.out.println("\n*--*--*--*--*--*--*--*--*--*--*--*--*--*--*");
+			System.out.println("Choose the Scheduling Algorithm: --->");
+			System.out.println("1. Priority Based Scheduling");
+			System.out.println("2. Round Robin");
+			System.out.println("3. Shortest-Job-First Preemtive ");
+			System.out.println("4. FCFS");		
+			System.out.println("5. Exit");
+			System.out.print("Enter Your Choice : ");
+			 choice= sc.nextInt();			
+			System.out.println("*--*--*--*--*--*--*--*--*--*--*--*--*--*--*");
+			switch(choice)
+			{
+				case 1: priority();
+					break;
+
+				case 2: rr();
+					break;
+
+				case 3: sjfp();
+					break;
+
+				case 4: fcfs();
+					break;
+
+			}
+		}while(choice!=5);
+	}
+
+
+	static void priority()
+	{
+		
+            Scanner s = new Scanner(System.in);
+            int x,n,p[],pp[],bt[],w[],t[],awt,atat,i;
+ 
+            p = new int[10];
+            pp = new int[10];
+            bt = new int[10];
+            w = new int[10];
+            t = new int[10];
+ 
+   //n is number of process
+   //p is process
+   //pp is process priority
+   //bt is process burst time
+   //w is wait time
+   // t is turnaround time
+   //awt is average waiting time
+   //atat is average turnaround time
+ 
+ 
+   System.out.print("Enter the number of process : ");
+   n = s.nextInt();
+    
+ 
+   for(i=0;i<n;i++)
+    {
+       System.out.print("\nProcess["+(i+1)+"]:");
+	System.out.print("\t Enter burst time : ");    
+  bt[i] = s.nextInt();
+System.out.print("\t time priorities :"); 
+      pp[i] = s.nextInt();
+      p[i]=i+1;
+    }
+ 
+//sorting on the basis of priority
+  for(i=0;i<n-1;i++)
+   {
+     for(int j=i+1;j<n;j++)
+     {
+       if(pp[i]>pp[j])
+       {
+     x=pp[i];
+     pp[i]=pp[j];
+     pp[j]=x;
+     x=bt[i];
+     bt[i]=bt[j];
+     bt[j]=x;
+     x=p[i];
+     p[i]=p[j];
+     p[j]=x;
+      }
+   }
+}
+w[0]=0;
+awt=0;
+t[0]=bt[0];
+atat=t[0];
+for(i=1;i<n;i++)
+ {
+   w[i]=t[i-1];
+   awt+=w[i];
+   t[i]=w[i]+bt[i];
+   atat+=t[i];
+ }
+ 
+//Displaying the process
+ 
+  System.out.print("\n\nProcess \t Burst Time \t Wait Time \t Turn Around Time   Priority \n");
+for(i=0;i<n;i++)
+  System.out.print("\n   "+p[i]+"\t\t   "+bt[i]+"\t\t     "+w[i]+"\t\t     "+t[i]+"\t\t     "+pp[i]+"\n");
+awt/=n;
+atat/=n;
+  System.out.print("\n Average Wait Time : "+awt);
+  System.out.print("\n Average Turn Around Time : "+atat);
+	}
+
+
+
+
+	static void rr()
+	{
+         Scanner s = new Scanner(System.in);
+ 
+          int wtime[],btime[],rtime[],num,quantum,total;
+ 
+          wtime = new int[10];
+          btime = new int[10];
+          rtime = new int[10];
+ 
+System.out.print("Enter number of processes(MAX 10): ");
+num = s.nextInt();
+System.out.print("Enter burst time");
+for(int i=0;i<num;i++) { System.out.print("\nP["+(i+1)+"]: "); btime[i] = s.nextInt(); rtime[i] = btime[i]; wtime[i]=0; } System.out.print("\n\nEnter quantum: "); quantum = s.nextInt(); int rp = num; int i=0; int time=0; System.out.print("0"); wtime[0]=0; while(rp!=0) { if(rtime[i]>quantum)
+ {
+   rtime[i]=rtime[i]-quantum;
+   System.out.print(" | P["+(i+1)+"] | ");
+   time+=quantum;
+   System.out.print(time);
+   }
+ else if(rtime[i]<=quantum && rtime[i]>0)
+ {time+=rtime[i];
+  rtime[i]=rtime[i]-rtime[i];
+  System.out.print(" | P["+(i+1)+"] | ");
+  rp--;
+System.out.print(time);
+ }
+
+
+ 
+i++;
+if(i==num)
+{
+i=0;
+}
+ 
+}
+	}
+
+
+
+	
+
+
+	static void sjfp()
+	{
+Scanner sc=new Scanner(System.in);
+System.out.println ("enter no of process:");
+int n= sc.nextInt();
+int pid[] = new int[n]; // it takes pid of process
+int at[] = new int[n]; // at means arrival time
+int bt[] = new int[n]; // bt means burst time
+int ct[] = new int[n]; // ct means complete time
+int ta[] = new int[n];// ta means turn around time
+int wt[] = new int[n];  // wt means waiting time
+int f[] = new int[n];  // f means it is flag it checks process is completed or not
+int k[]= new int[n];   // it is also stores brust time
+    int i, st=0, tot=0;
+    float avgwt=0, avgta=0;
+ 
+    for (i=0;i<n;i++)
+    {
+     pid[i]= i+1;
+     System.out.println ("enter process " +(i+1)+ " arrival time:");
+     at[i]= sc.nextInt();
+     System.out.println("enter process " +(i+1)+ " burst time:");
+     bt[i]= sc.nextInt();
+     k[i]= bt[i];
+     f[i]= 0;
+    }
+    
+    while(true){
+     int min=99,c=n;
+     if (tot==n)
+     break;
+    
+     for ( i=0;i<n;i++)
+     {
+     if ((at[i]<=st) && (f[i]==0) && (bt[i]<min))
+     {	
+     min=bt[i];
+     c=i;
+     }
+     }
+    
+     if (c==n)
+     st++;
+     else
+     {
+     bt[c]--;
+     st++;
+     if (bt[c]==0)
+     {
+     ct[c]= st;
+     f[c]=1;
+     tot++;
+     }
+     }
+    }
+    
+    for(i=0;i<n;i++)
+    {
+     ta[i] = ct[i] - at[i];
+     wt[i] = ta[i] - k[i];
+     avgwt+= wt[i];
+     avgta+= ta[i];
+    }
+    
+    System.out.println("pid  arrival  burst  complete turn waiting");
+    for(i=0;i<n;i++)
+    {
+     System.out.println(pid[i] +"\t"+ at[i]+"\t"+ k[i] +"\t"+ ct[i] +"\t"+ ta[i] +"\t"+ wt[i]);
+    }
+    
+    System.out.println("\naverage tat is "+ (float)(avgta/n));
+    System.out.println("average wt is "+ (float)(avgwt/n));
+  
+
+
+	}
+
+	static void fcfs()
+	{
+
+		System.out.println("Enter the no. of processes :");
+		int n= sc.nextInt();
+		int[] burst=new int[n];
+		int[] order=new int[n];
+		int[] wait=new int[n];
+
+		for(int i=1;i<=n;i++)
+		{
+			System.out.print("Enter Burst Time of Process P"+i+" :");
+			burst[i-1]=sc.nextInt();
+
+		}
+
+		System.out.println("Enter Order of Arrival :");
+		for(int i=0;i<n;i++)
+		{
+			order[i]=sc.nextInt();
+
+		}
+		
+		int temp=0;
+		int total=0;
+		System.out.println("Execution Order:");
+		System.out.println("Process \t Burst Time \t Waiting Time");
+		for(int i=0;i<n;i++)
+		{
+			wait[i]=temp;
+			System.out.println("P"+order[i]+"\t\t"+burst[order[i]-1]+"\t\t"+temp);
+			temp += burst[order[i]-1];
+			total += wait[i];
+		}
+		
+
+
+		
+		System.out.print("Average waiting Time : "+(total/n));
+
+		
+
+
+
+
+	}
+
+
+}
+
+pass 1
+
+import java.io.BufferedReader;
+import java.io.*;
+import java.io.IOException;
+import java.util.*;
+
+public class pass1 {
+	public static void main(String[] args) {
+
+		BufferedReader br = null;
+		FileReader fr = null;
+
+		FileWriter fw = null;
+		BufferedWriter bw = null;
+
+		try {
+			String inputfilename = "Input.txt";
+			fr = new FileReader(inputfilename);
+			br = new BufferedReader(fr);
+
+			String OUTPUTFILENAME = "IC.txt";
+			fw = new FileWriter(OUTPUTFILENAME);
+			bw = new BufferedWriter(fw);
+
+			Hashtable<String, String> is = new Hashtable<String, String>();
+			is.put("STOP", "00");
+			is.put("ADD", "01");
+			is.put("SUB", "02");
+			is.put("MULT", "03");
+			is.put("MOVER", "04");
+			is.put("MOVEM", "05");
+			is.put("COMP", "06");
+			is.put("BC", "07");
+			is.put("DIV", "08");
+			is.put("READ", "09");
+			is.put("PRINT", "10");
+
+			Hashtable<String, String> dl = new Hashtable<String, String>();
+			dl.put("DC", "01");
+			dl.put("DS", "02");
+
+			Hashtable<String, String> ad = new Hashtable<String, String>();
+
+			ad.put("START", "01");
+			ad.put("END", "02");
+			ad.put("ORIGIN", "03");
+			ad.put("EQU", "04");
+			ad.put("LTORG", "05");
+
+			Hashtable<String, String> symtab = new Hashtable<String, String>();
+			Hashtable<String, String> littab = new Hashtable<String, String>();
+
+			String sCurrentLine;
+			int locptr = 0;
+			int litptr = 1;
+			int symptr = 1;
+			
+			sCurrentLine = br.readLine();
+
+			String s1 = sCurrentLine.split(" ")[1];
+			if (s1.equals("START")) {
+				bw.write("AD \t 01 \t");
+				String s2 = sCurrentLine.split(" ")[2];
+				bw.write("C \t" + s2 + "\n");
+				locptr = Integer.parseInt(s2);
+			}
+
+			while ((sCurrentLine = br.readLine()) != null) {
+				int mind_the_LC = 0;
+				String type = null;
+
+				int flag2 = 0;		//checks whether addr is assigned to current symbol
+				
+				String s = sCurrentLine.split(" |\\,")[0];	//consider the first word in the line
+				
+				for (Map.Entry m : symtab.entrySet()) {				//allocating addr to arrived symbols
+					if (s.equals(m.getKey())) {
+						m.setValue(locptr);
+						flag2 = 1;
+					}
+				}
+				if (s.length() != 0 && flag2 == 0) {		//if current string is not " " or addr is not assigned,
+															//then the current string must be a new symbol.			
+					symtab.put(s, String.valueOf(locptr));
+					symptr++;
+				}
+
+				int isOpcode = 0;		//checks whether current word is an opcode or not
+				
+				s = sCurrentLine.split(" |\\,")[1];			//consider the second word in the line
+				
+				for (Map.Entry m : is.entrySet()) {
+					if (s.equals(m.getKey())) {
+						bw.write("IS\t" + m.getValue() + "\t");		//if match found in imperative stmt
+						type = "is";
+						isOpcode = 1;
+					}
+				}
+				
+				
+				for (Map.Entry m : ad.entrySet()) {
+					if (s.equals(m.getKey())) {
+						bw.write("AD\t" + m.getValue() + "\t");		//if match found in Assembler Directive
+						type = "ad";
+						isOpcode = 1;
+					}
+				}
+				for (Map.Entry m : dl.entrySet()) {
+					if (s.equals(m.getKey())) {
+						bw.write("DL\t" + m.getValue() + "\t");		//if match found in declarative stmt
+						type = "dl";
+						isOpcode = 1;
+					}
+				}
+				
+				
+				if (s.equals("END")) {
+					for (Map.Entry m : littab.entrySet()) {
+						if (m.getValue() == "") {
+							m.setValue(locptr);
+							locptr++;
+							mind_the_LC = 1;
+						}
+					}
+				}
+				
+				
+				if(s.equals("EQU")){
+					symtab.put("equ", String.valueOf(locptr));
+				}
+				
+				
+				if (sCurrentLine.split(" |\\,").length > 2) {		//if there are 3 words
+					s = sCurrentLine.split(" |\\,")[2];				//consider the 3rd word
+																	
+																	//this is our first operand.
+																	//it must be either a Register/Declaration/Symbol
+					if (s.equals("AREG")) {
+						bw.write("1\t");
+						isOpcode = 1;
+					} else if (s.equals("BREG")) {
+						bw.write("2\t");
+						isOpcode = 1;
+					} else if (s.equals("CREG")) {
+						bw.write("3\t");
+						isOpcode = 1;
+					} else if (s.equals("DREG")) {
+						bw.write("4\t");
+						isOpcode = 1;
+					} else if (type == "dl") {
+						bw.write("C\t" + s + "\t");
+					} else {
+						symtab.put(s, "");				//forward referenced symbol
+					}
+				}
+				
+				
+				if (sCurrentLine.split(" |\\,").length > 3) {		//if there are 4 words
+					
+					s = sCurrentLine.split(" |\\,")[3];			//consider 4th word.
+																//this is our 2nd operand
+																//it is either a literal, or a symbol
+					if (s.contains("=")) {
+						littab.put(s, "");
+						bw.write("L\t" + litptr + "\t");
+						isOpcode = 1;
+						litptr++;
+					} else {
+						symtab.put(s, "");			//Doubt : what if the current symbol is already present in SYMTAB?
+													//Overwrite?
+						bw.write("S\t" + symptr + "\t");		
+						symptr++;
+						
+					}
+				}
+
+				bw.write("\n");		//done with a line.
+
+				if (mind_the_LC == 0)
+					locptr++;
+			}
+
+			String f1 = "SYMTAB.txt";
+			FileWriter fw1 = new FileWriter(f1);
+			BufferedWriter bw1 = new BufferedWriter(fw1);
+			for (Map.Entry m : symtab.entrySet()) {
+				bw1.write(m.getKey() + "\t" + m.getValue()+"\n");				
+				System.out.println(m.getKey() + " " + m.getValue());
+			}
+
+			String f2 = "LITTAB.txt";
+			FileWriter fw2 = new FileWriter(f2);
+			BufferedWriter bw2 = new BufferedWriter(fw2);
+			for (Map.Entry m : littab.entrySet()) {
+				bw2.write(m.getKey() + "\t" + m.getValue()+"\n");
+				System.out.println(m.getKey() + " " + m.getValue());
+			}
+			
+
+			bw.close();
+			bw1.close();
+			bw2.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+}
+
+pass 2
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Hashtable;
+import java.util.Map;
+
+public class Pass2 {
+
+	public static void main(String[] args) {
+
+		try {
+			
+			String f = "IC.txt";
+			FileReader fw = new FileReader(f);
+			BufferedReader IC_file = new BufferedReader(fw);
+
+			String f1 = "SYMTAB.txt";
+			FileReader fw1 = new FileReader(f1);
+			BufferedReader symtab_file = new BufferedReader(fw1);
+			symtab_file.mark(500);
+
+			String f2 = "LITTAB.txt";
+			FileReader fw2 = new FileReader(f2);
+			BufferedReader littab_file = new BufferedReader(fw2);
+			littab_file.mark(500);
+
+			String littab[][]=new String[10][2] ;
+			
+			Hashtable<String, String> symtab = new Hashtable<String, String>();
+			String str;
+			int z=0;
+			while ((str = littab_file.readLine()) != null) {
+
+				littab[z][0]=str.split("\t")[0];
+				littab[z][1]=str.split("\t")[1];
+				z++;
+			}
+			while ((str = symtab_file.readLine()) != null) {
+				symtab.put(str.split("\t")[0], str.split("\t")[1]);
+			}
+
+			String f4 = "MACHINE_CODE.txt";
+			FileWriter fw4 = new FileWriter(f4);
+			BufferedWriter machine_code_file = new BufferedWriter(fw4);
+
+			String sCurrentLine;
+			sCurrentLine = IC_file.readLine();
+			int locptr=0;
+			locptr=Integer.parseInt(sCurrentLine.split("\t")[3]);
+			
+			while ((sCurrentLine = IC_file.readLine()) != null) {
+				
+				machine_code_file.write(locptr+"\t");		//always write the LC
+				
+				
+				String s0 = sCurrentLine.split("\t")[0];
+
+				String s1 = sCurrentLine.split("\t")[1];
+				String s2=" ";			
+				if (sCurrentLine.split("\t").length>2)
+				s2=sCurrentLine.split("\t")[3];
+				
+				if (s0.equals("IS")) {
+					machine_code_file.write(s1 + "\t");
+					if (sCurrentLine.split("\t").length == 5) {
+						
+						machine_code_file.write(sCurrentLine.split("\t")[2] + "\t");
+						
+						
+						if (sCurrentLine.split("\t")[3].equals("L")) {
+							int add = Integer.parseInt(sCurrentLine.split("\t")[4]);
+							
+									machine_code_file.write(littab[add-1][1]);
+						
+						}
+						
+						
+						if (sCurrentLine.split("\t")[3].equals("S")) {
+							int add1 = Integer.parseInt(sCurrentLine.split("\t")[4]);
+							int i = 1;
+							String l1;
+							for (Map.Entry m : symtab.entrySet()) {
+								if (i == add1) {
+									machine_code_file.write((String) m.getValue());
+								}
+								i++;
+							}
+							
+						}
+					} else {
+						machine_code_file.write("0\t000");
+					}
+				}
+
+				if(s0.equals("DL")&&s1.equals("02")){		//if it is DS stmt
+							
+					machine_code_file.write("00\t0\t00"+s2);
+					
+				}				
+				if(s0.equals("AD")&&s1.equals("02"))//if it is "END" stmt
+				 {
+					String s;
+					littab_file.reset();
+					while((s = littab_file.readLine()) != null) {
+						machine_code_file.write("00\t0\t00" + s.split("'")[1]+"\n\t");
+					}
+				}
+				
+				
+				
+				
+				locptr++;
+				machine_code_file.write("\n");
+			}
+			IC_file.close();
+			symtab_file.close();
+			littab_file.close();
+			
+			machine_code_file.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+}
+
+macrop1
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+
+public class MacroP1 {
+
+	public static void main(String[] args) throws IOException{
+		BufferedReader br=new BufferedReader(new FileReader("macro_input.asm"));
+		
+		FileWriter mnt=new FileWriter("mnt.txt");
+		FileWriter mdt=new FileWriter("mdt.txt");
+		FileWriter kpdt=new FileWriter("kpdt.txt");
+		FileWriter pnt=new FileWriter("pntab.txt");
+		FileWriter ir=new FileWriter("intermediate.txt");
+		LinkedHashMap<String, Integer> pntab=new LinkedHashMap<>();
+		String line;
+		String Macroname = null;
+		int mdtp=1,kpdtp=0,paramNo=1,pp=0,kp=0,flag=0;
+		while((line=br.readLine())!=null)
+		{
+			
+			String parts[]=line.split("\\s+");
+			if(parts[0].equalsIgnoreCase("MACRO"))
+			{
+				flag=1;
+				line=br.readLine();
+				parts=line.split("\\s+");
+				Macroname=parts[0];
+				if(parts.length<=1)
+				{
+					mnt.write(parts[0]+"\t"+pp+"\t"+kp+"\t"+mdtp+"\t"+(kp==0?kpdtp:(kpdtp+1))+"\n");
+					continue;
+				}
+				for(int i=1;i<parts.length;i++) //processing of parameters
+				{
+					parts[i]=parts[i].replaceAll("[&,]", "");
+					//System.out.println(parts[i]);
+					if(parts[i].contains("="))
+					{
+						++kp;
+						String keywordParam[]=parts[i].split("=");
+						pntab.put(keywordParam[0], paramNo++);
+						if(keywordParam.length==2)
+						{
+							kpdt.write(keywordParam[0]+"\t"+keywordParam[1]+"\n");
+						}
+						else
+						{
+							kpdt.write(keywordParam[0]+"\t-\n");
+						}
+					}
+					else
+					{
+						pntab.put(parts[i], paramNo++);
+						pp++;
+					}
+				}
+				mnt.write(parts[0]+"\t"+pp+"\t"+kp+"\t"+mdtp+"\t"+(kp==0?kpdtp:(kpdtp+1))+"\n");
+				kpdtp=kpdtp+kp;
+				//System.out.println("KP="+kp);
+				
+				
+			}
+			else if(parts[0].equalsIgnoreCase("MEND"))
+			{
+				mdt.write(line+"\n");
+				flag=kp=pp=0;
+				mdtp++;
+				paramNo=1;
+				pnt.write(Macroname+":\t");
+				Iterator<String> itr=pntab.keySet().iterator();
+				while(itr.hasNext())
+				{
+					pnt.write(itr.next()+"\t");
+				}
+				pnt.write("\n");
+				pntab.clear();
+			}
+			else if(flag==1)
+			{
+				for(int i=0;i<parts.length;i++)
+				{
+					if(parts[i].contains("&"))
+					{
+						parts[i]=parts[i].replaceAll("[&,]", "");
+						mdt.write("(P,"+pntab.get(parts[i])+")\t");
+					}
+					else
+					{
+						mdt.write(parts[i]+"\t");
+					}
+				}
+				mdt.write("\n");
+				mdtp++;
+			}
+			else
+			{
+				ir.write(line+"\n");
+			}
+		}
+		br.close();
+		mdt.close();
+		mnt.close();
+		ir.close();
+		pnt.close();
+		kpdt.close();
+		System.out.println("MAcro PAss1 Processing done. :)");
+	}
+
+}
+
+macrop2
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.util.HashMap;
+import java.util.Vector;
+
+public class MacroP2 {
+
+	public static void main(String[] args) throws Exception {
+		BufferedReader irb=new BufferedReader(new FileReader("intermediate.txt"));
+		BufferedReader mdtb=new BufferedReader(new FileReader("mdt.txt"));
+		BufferedReader kpdtb=new BufferedReader(new FileReader("kpdt.txt"));
+		BufferedReader mntb=new BufferedReader(new FileReader("mnt.txt"));
+		
+		FileWriter fr=new FileWriter("pass2.txt");
+		
+		HashMap<String, MNTEntry> mnt=new HashMap<>();
+		HashMap<Integer, String> aptab=new HashMap<>();
+		HashMap<String,Integer> aptabInverse=new HashMap<>();
+		
+		Vector<String>mdt=new Vector<String>();
+		Vector<String>kpdt=new Vector<String>();
+		
+		int pp,kp,mdtp,kpdtp,paramNo;
+		String line;
+		while((line=mdtb.readLine())!=null)
+		{
+			mdt.addElement(line);
+		}
+		while((line=kpdtb.readLine())!=null)
+		{
+			kpdt.addElement(line);
+		}
+		while((line=mntb.readLine())!=null)
+		{
+			String parts[]=line.split("\\s+");
+			mnt.put(parts[0], new MNTEntry(parts[0], Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Integer.parseInt(parts[3]), Integer.parseInt(parts[4])));
+			
+		}
+		
+		while((line=irb.readLine())!=null)
+		{
+			String []parts=line.split("\\s+");
+			if(mnt.containsKey(parts[0]))
+			{
+				pp=mnt.get(parts[0]).getPp();
+				kp=mnt.get(parts[0]).getKp();
+				kpdtp=mnt.get(parts[0]).getKpdtp();
+				mdtp=mnt.get(parts[0]).getMdtp();
+				paramNo=1;
+				for(int i=0;i<pp;i++)
+				{ 
+					parts[paramNo]=parts[paramNo].replace(",", "");
+					aptab.put(paramNo, parts[paramNo]);
+					aptabInverse.put(parts[paramNo], paramNo);
+					paramNo++;
+				}
+				int j=kpdtp-1;
+				for(int i=0;i<kp;i++)
+				{
+					String temp[]=kpdt.get(j).split("\t");
+					aptab.put(paramNo,temp[1]);
+					aptabInverse.put(temp[0],paramNo);
+					j++;
+					paramNo++;
+				}
+				
+				for(int i=pp+1;i<parts.length;i++)
+				{
+					parts[i]=parts[i].replace(",", "");
+					String splits[]=parts[i].split("=");
+					String name=splits[0].replaceAll("&", "");
+					aptab.put(aptabInverse.get(name),splits[1]);
+				}
+				int i=mdtp-1;
+				while(!mdt.get(i).equalsIgnoreCase("MEND"))
+				{
+					String splits[]=mdt.get(i).split("\\s+");
+					fr.write("+");
+					for(int k=0;k<splits.length;k++)
+					{
+						if(splits[k].contains("(P,"))
+						{
+							splits[k]=splits[k].replaceAll("[^0-9]", "");//not containing number
+							String value=aptab.get(Integer.parseInt(splits[k]));
+							fr.write(value+"\t");
+						}
+						else
+						{
+							fr.write(splits[k]+"\t");
+						}
+					}
+					fr.write("\n");	
+					i++;
+				}
+				
+				aptab.clear();
+				aptabInverse.clear();
+			}
+			else
+			{
+				fr.write(line+"\n");
+			}
+			
+	}
+	
+	fr.close();
+	mntb.close();
+	mdtb.close();
+	kpdtb.close();
+	irb.close();
+	}
+}
+
